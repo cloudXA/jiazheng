@@ -17,16 +17,21 @@
     <view class="input-panel">
       <view class="input-panel__head">
         <view class="input-panel__title">客户沟通记录</view>
-        <view class="input-panel__example" bindtap="onUseExample">填入示例</view>
+        <view class="input-panel__actions">
+          <view wx:if="{{input}}" class="input-panel__clear" bindtap="onClearInput">清空</view>
+          <view class="input-panel__example" bindtap="onUseExample">填入示例</view>
+        </view>
       </view>
       <textarea
         class="case-input"
         value="{{input}}"
+        cursor="{{cursorPosition}}"
         maxlength="-1"
         auto-height
         placeholder="例如：客户试工7天，电话里同意收30%服务费，但签约后反悔；阿姨来自合作方，退款规则还没确认……"
         placeholder-class="case-input__placeholder"
         bindinput="onInput"
+        bindblur="onInputBlur"
       />
       <view class="voice-row">
         <view

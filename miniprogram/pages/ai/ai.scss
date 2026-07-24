@@ -72,6 +72,15 @@
   font-weight: 750;
   color: #1F2937;
 }
+.input-panel__actions {
+  display: flex;
+  align-items: center;
+  gap: 26rpx;
+}
+.input-panel__clear {
+  font-size: 23rpx;
+  color: #B91C1C;
+}
 .input-panel__example {
   font-size: 23rpx;
   color: #4F46E5;

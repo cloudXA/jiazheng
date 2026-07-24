@@ -7,6 +7,7 @@ const recorderManager = wx.getRecorderManager()
 
 interface AssistantData {
   input: string
+  cursorPosition: number
   recording: boolean
   transcribing: boolean
   analyzing: boolean
@@ -18,12 +19,20 @@ interface AssistantData {
 interface TextInputEvent {
   detail: {
     value: string
+    cursor: number
+  }
+}
+
+interface TextBlurEvent {
+  detail: {
+    cursor: number
   }
 }
 
 Component({
   data: {
     input: '',
+    cursorPosition: 0,
     recording: false,
     transcribing: false,
     analyzing: false,
@@ -55,23 +64,43 @@ Component({
 
       const draft = wx.getStorageSync(ASSISTANT_DRAFT_KEY) as string
       if (draft) {
-        this.setData({ input: draft, result: null, saved: false })
+        this.setData({
+          input: draft,
+          cursorPosition: draft.length,
+          result: null,
+          saved: false,
+        })
         wx.removeStorageSync(ASSISTANT_DRAFT_KEY)
       }
     },
     onInput(e: TextInputEvent) {
       this.setData({
         input: e.detail.value,
+        cursorPosition: e.detail.cursor,
         result: null,
         saved: false,
       })
     },
+    onInputBlur(e: TextBlurEvent) {
+      this.setData({ cursorPosition: e.detail.cursor })
+    },
     onUseExample() {
+      const example =
+        '客户王女士找住家保姆，先试工7天。阿姨是合作方推荐的，' +
+        '电话中说好成功后收首月工资30%的服务费，但客户还没有微信确认，' +
+        '退款和不得私签的规则也没有说清楚。'
       this.setData({
-        input:
-          '客户王女士找住家保姆，先试工7天。阿姨是合作方推荐的，' +
-          '电话中说好成功后收首月工资30%的服务费，但客户还没有微信确认，' +
-          '退款和不得私签的规则也没有说清楚。',
+        input: example,
+        cursorPosition: example.length,
+        result: null,
+        saved: false,
+        transcriptionNote: '',
+      })
+    },
+    onClearInput() {
+      this.setData({
+        input: '',
+        cursorPosition: 0,
         result: null,
         saved: false,
         transcriptionNote: '',
@@ -123,8 +152,17 @@ Component({
       })
       try {
         const transcription = await transcribeAudio(tempFilePath)
+        const insertPosition = Math.min(
+          Math.max(this.data.cursorPosition, 0),
+          this.data.input.length,
+        )
+        const input =
+          this.data.input.slice(0, insertPosition) +
+          transcription.text +
+          this.data.input.slice(insertPosition)
         this.setData({
-          input: transcription.text,
+          input,
+          cursorPosition: insertPosition + transcription.text.length,
           result: null,
           saved: false,
           transcriptionNote: transcription.simulated
@@ -175,6 +213,7 @@ Component({
     onReset() {
       this.setData({
         input: '',
+        cursorPosition: 0,
         result: null,
         saved: false,
         transcriptionNote: '',
