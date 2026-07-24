@@ -2,10 +2,10 @@
 // 注意：前端不持有任何密钥，所有鉴权/AI 调用都打到你的 Python 后端。
 
 // ======== 开发阶段配置 ========
-export const MOCK_MODE = true // 后端未就绪时为 true，跳过真实网络请求，用 mock 数据跑通流程
+export const MOCK_MODE = false // 后端未就绪时为 true，跳过真实网络请求，用 mock 数据跑通流程
 // ============================
 
-const BASE_URL = MOCK_MODE ? '' : 'https://your-python-backend.example.com' // TODO: 替换为你的 Python 后端地址
+const BASE_URL = MOCK_MODE ? '' : 'http://127.0.0.1:8000'
 
 export function getApiBaseUrl(): string {
   return BASE_URL
