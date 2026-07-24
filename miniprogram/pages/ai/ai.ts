@@ -112,8 +112,7 @@ Component({
         duration: 60000,
         sampleRate: 16000,
         numberOfChannels: 1,
-        encodeBitRate: 48000,
-        format: 'mp3',
+        format: 'wav',
       })
     },
     async handleRecordingStop(tempFilePath: string) {
@@ -132,9 +131,10 @@ Component({
             ? '当前为开发模拟转写；接入后端语音服务后会使用真实录音内容。'
             : '语音已转成文字，请核对后再分析。',
         })
-      } catch {
-        this.setData({ transcriptionNote: '转写失败，录音未丢失，请改用文字补充。' })
-        wx.showToast({ title: '语音转写失败', icon: 'none' })
+      } catch (error) {
+        const message = error instanceof Error ? error.message : '语音转写失败'
+        this.setData({ transcriptionNote: `${message}，录音未丢失。` })
+        wx.showToast({ title: message, icon: 'none' })
       } finally {
         this.setData({ transcribing: false })
       }

@@ -1,5 +1,9 @@
 from fastapi.testclient import TestClient
 
+import app.api.router as router_module
+from app.config import Settings, get_settings
+from app.main import app as fastapi_app
+
 
 def login(client: TestClient) -> tuple[str, dict[str, object]]:
     response = client.post(
@@ -91,3 +95,48 @@ def test_transcription_contract_and_auth_guard(client: TestClient) -> None:
     assert response.status_code == 200
     assert response.json()["data"]["simulated"] is True
     assert "客户李女士" in response.json()["data"]["text"]
+
+
+def test_tencent_transcription_route(
+    client: TestClient,
+    monkeypatch,
+) -> None:
+    settings = Settings(
+        asr_provider="tencent",
+        tencent_secret_id="test-secret-id",
+        tencent_secret_key="test-secret-key",
+    )
+
+    class FakeTencentAsrService:
+        def __init__(self, service_settings: Settings) -> None:
+            assert service_settings.tencent_asr_configured
+
+        async def transcribe(
+            self,
+            audio_bytes: bytes,
+            *,
+            filename: str | None,
+            content_type: str | None,
+        ) -> str:
+            assert audio_bytes == b"example-audio"
+            assert filename == "voice.mp3"
+            assert content_type == "audio/mpeg"
+            return "客户需要一名住家保姆。"
+
+    monkeypatch.setattr(router_module, "TencentAsrService", FakeTencentAsrService)
+    fastapi_app.dependency_overrides[get_settings] = lambda: settings
+    try:
+        token, _user_info = login(client)
+        response = client.post(
+            "/api/ai/transcribe",
+            headers={"Authorization": f"Bearer {token}"},
+            files={"audio": ("voice.mp3", b"example-audio", "audio/mpeg")},
+        )
+    finally:
+        fastapi_app.dependency_overrides.pop(get_settings, None)
+
+    assert response.status_code == 200
+    assert response.json()["data"] == {
+        "text": "客户需要一名住家保姆。",
+        "simulated": False,
+    }

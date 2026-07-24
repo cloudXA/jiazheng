@@ -32,6 +32,12 @@ class Settings(BaseSettings):
     wechat_app_id: str = "example"
     wechat_app_secret: str = "example"
     asr_provider: str = "mock"
+    tencent_secret_id: str = "example"
+    tencent_secret_key: str = "example"
+    tencent_asr_region: str = "ap-shanghai"
+    tencent_asr_engine: str = "16k_zh"
+    tencent_asr_timeout_seconds: int = 20
+    tencent_asr_hotword_list: str = ""
     cors_origins: str = "*"
 
     @property
@@ -52,6 +58,16 @@ class Settings(BaseSettings):
         )
 
     @property
+    def tencent_asr_configured(self) -> bool:
+        return (
+            self.asr_provider.lower() == "tencent"
+            and bool(self.tencent_secret_id)
+            and self.tencent_secret_id != "example"
+            and bool(self.tencent_secret_key)
+            and self.tencent_secret_key != "example"
+        )
+
+    @property
     def cors_origin_list(self) -> list[str]:
         if self.cors_origins.strip() == "*":
             return ["*"]
@@ -66,6 +82,8 @@ class Settings(BaseSettings):
             raise RuntimeError("DATABASE_URL must be configured in production")
         if not self.wechat_configured:
             raise RuntimeError("WeChat credentials must be configured in production")
+        if self.asr_provider.lower() == "tencent" and not self.tencent_asr_configured:
+            raise RuntimeError("Tencent ASR credentials must be configured in production")
 
 
 @lru_cache

@@ -21,6 +21,12 @@ from app.schemas import (
 )
 from app.security import create_access_token
 from app.services.risk_workflow import get_risk_workflow
+from app.services.tencent_asr import (
+    MAX_RAW_AUDIO_BYTES,
+    InvalidAudioError,
+    TencentAsrError,
+    TencentAsrService,
+)
 from app.services.wechat import WechatClient
 
 router = APIRouter()
@@ -188,7 +194,8 @@ async def transcribe_audio(
     settings: SettingsDependency,
     audio: Annotated[UploadFile, File()],
 ) -> ApiResponse[TranscriptionResult]:
-    if settings.asr_provider == "mock":
+    provider = settings.asr_provider.lower()
+    if provider == "mock":
         return ApiResponse(
             data=TranscriptionResult(
                 simulated=True,
@@ -200,9 +207,39 @@ async def transcribe_audio(
             )
         )
 
+    if provider == "tencent":
+        if not settings.tencent_asr_configured:
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail="腾讯云语音识别尚未配置，请先设置 SecretId 和 SecretKey",
+            )
+        audio_bytes = await audio.read(MAX_RAW_AUDIO_BYTES + 1)
+        try:
+            text_result = await TencentAsrService(settings).transcribe(
+                audio_bytes,
+                filename=audio.filename,
+                content_type=audio.content_type,
+            )
+        except InvalidAudioError as error:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=str(error),
+            ) from None
+        except TencentAsrError as error:
+            raise HTTPException(
+                status_code=status.HTTP_502_BAD_GATEWAY,
+                detail=str(error),
+            ) from None
+        return ApiResponse(
+            data=TranscriptionResult(
+                simulated=False,
+                text=text_result,
+            )
+        )
+
     raise HTTPException(
         status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail=f"语音服务尚未配置，收到文件：{audio.filename or 'audio'}",
+        detail=f"不支持的语音服务：{settings.asr_provider}",
     )
 
 
@@ -256,4 +293,3 @@ def _case_read(record: RiskCase) -> RiskCaseRead:
         status=record.status,
         version=record.version,
     )
-

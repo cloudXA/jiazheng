@@ -5,7 +5,7 @@
 export const MOCK_MODE = false // 后端未就绪时为 true，跳过真实网络请求，用 mock 数据跑通流程
 // ============================
 
-const BASE_URL = MOCK_MODE ? '' : 'http://127.0.0.1:8000'
+const BASE_URL = MOCK_MODE ? '' : 'http://10.154.61.117:8000'
 
 export function getApiBaseUrl(): string {
   return BASE_URL
