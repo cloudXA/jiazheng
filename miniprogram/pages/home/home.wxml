@@ -1,0 +1,74 @@
+<navigation-bar title="签约工作台" back="{{false}}"></navigation-bar>
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="page anim-fade-up">
+    <view class="greeting">
+      <view class="greeting__hi">{{greeting}}</view>
+      <view class="greeting__sub">先把约定说清楚，再安排阿姨上门</view>
+    </view>
+
+    <view class="start-panel" bindtap="onPrimaryTap" hover-class="start-panel--hover">
+      <view class="start-panel__body">
+        <view class="start-panel__eyebrow">签约风控助手</view>
+        <view class="start-panel__title">录一段客户沟通，生成确认清单</view>
+        <view class="start-panel__desc">识别收费、试工、私签与照护安全风险</view>
+      </view>
+      <view class="start-panel__action">开始录入</view>
+    </view>
+
+    <view class="metrics">
+      <view wx:for="{{metrics}}" wx:key="key" class="metric metric--{{item.tone}}">
+        <view class="metric__value">{{item.value}}</view>
+        <view class="metric__label">{{item.label}}</view>
+      </view>
+    </view>
+
+    <view class="section-head">
+      <view class="section-head__title">常用工作</view>
+      <view class="section-head__hint">未确认，不派单</view>
+    </view>
+    <view class="entries">
+      <view wx:for="{{entries}}" wx:key="key" class="entry" data-key="{{item.key}}" bindtap="onEntryTap" hover-class="entry--hover">
+        <view class="entry__symbol">{{item.symbol}}</view>
+        <view class="entry__label">{{item.label}}</view>
+        <view class="entry__desc">{{item.desc}}</view>
+      </view>
+    </view>
+
+    <view class="section-head section-head--records">
+      <view class="section-head__title">最近记录</view>
+      <view class="section-head__count">{{cases.length}} 条</view>
+    </view>
+
+    <view wx:if="{{cases.length > 0}}" class="case-list">
+      <view
+        wx:for="{{cases}}"
+        wx:key="id"
+        class="case-card"
+        data-id="{{item.id}}"
+        bindtap="onCaseTap"
+        hover-class="case-card--hover"
+      >
+        <view class="case-card__top">
+          <view class="risk-tag risk-tag--{{item.riskLevel}}">{{item.riskLabel}}</view>
+          <view class="case-card__status">{{item.statusLabel}}</view>
+        </view>
+        <view class="case-card__title">{{item.title}}</view>
+        <view class="case-card__summary">{{item.summary}}</view>
+        <view class="case-card__foot">
+          <view>{{item.createdLabel}}</view>
+          <view class="case-card__arrow">›</view>
+        </view>
+      </view>
+    </view>
+
+    <view wx:else class="empty-state">
+      <view class="empty-state__mark">+</view>
+      <view class="empty-state__title">还没有签约记录</view>
+      <view class="empty-state__desc">从客户的一段口述开始，系统会帮你整理风险和确认话术。</view>
+      <view class="empty-state__button" bindtap="onPrimaryTap">新建第一条</view>
+    </view>
+
+    <view class="legal-note">风险提示仅用于业务留痕与流程辅助，不替代律师意见或正式合同审核。</view>
+    <view class="bottom-safe"></view>
+  </view>
+</scroll-view>

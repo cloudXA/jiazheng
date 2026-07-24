@@ -1,0 +1,72 @@
+.page {
+  padding: 24rpx 32rpx 0;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 28rpx;
+  padding: 40rpx 36rpx;
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.12), rgba(124, 58, 237, 0.12));
+}
+.profile__avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+.profile__avatar--ph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 56rpx;
+  background: rgba(255, 255, 255, 0.7);
+}
+.profile__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+.profile__name {
+  font-size: 38rpx;
+  font-weight: 800;
+  color: #1A1A2E;
+}
+.profile__phone {
+  font-size: 26rpx;
+  color: #6B7280;
+}
+
+.group {
+  margin-top: 28rpx;
+  padding: 8rpx 28rpx;
+  overflow: hidden;
+}
+.cell {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  height: 100rpx;
+  transition: background 0.18s ease;
+}
+.cell--hover {
+  background: rgba(79, 70, 229, 0.06);
+}
+.cell__icon {
+  font-size: 36rpx;
+  width: 48rpx;
+  text-align: center;
+}
+.cell__label {
+  flex: 1;
+  font-size: 30rpx;
+  color: #1A1A2E;
+}
+.cell__arrow {
+  font-size: 38rpx;
+  color: #C4C9D4;
+}
+.cell--danger .cell__label {
+  color: #EF4444;
+}

@@ -1,0 +1,38 @@
+<view class="login">
+  <view class="login__bg"></view>
+
+  <view class="login__brand anim-fade-up">
+    <view class="login__logo">AI</view>
+    <view class="login__welcome">欢迎使用</view>
+    <view class="login__sub">登录后体验完整能力</view>
+  </view>
+
+  <block wx:if="{{status === 'idle'}}">
+    <view class="card glass-card anim-fade-up" style="animation-delay:0.1s;">
+      <button class="avatar-wrapper" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+        <image wx:if="{{avatarUrl}}" class="avatar" src="{{avatarUrl}}" mode="aspectFill" />
+        <image wx:else class="avatar" src="{{defaultAvatar}}" mode="aspectFill" />
+        <view class="avatar-tip">选择头像</view>
+      </button>
+      <view class="nickname-wrapper">
+        <text class="nickname-label">昵称</text>
+        <input class="nickname-input" type="nickname" placeholder="请输入昵称" value="{{nickName}}" bind:change="onInputChange" />
+      </view>
+    </view>
+
+    <button class="btn-phone login__phone anim-fade-up" style="animation-delay:0.2s;" open-type="getPhoneNumber" bind:getphonenumber="onGetPhoneNumber">
+      手机号一键登录
+    </button>
+    <view class="login__privacy anim-fade-up" style="animation-delay:0.25s;">登录即代表同意《隐私政策》与《用户协议》</view>
+  </block>
+
+  <block wx:else>
+    <view class="card glass-card anim-fade-up">
+      <image wx:if="{{avatarUrl}}" class="info-avatar" src="{{avatarUrl}}" mode="aspectFill" />
+      <image wx:else class="info-avatar" src="{{defaultAvatar}}" mode="aspectFill" />
+      <view class="info-name">{{nickName || '微信用户'}}</view>
+      <view class="info-phone">{{phone}}</view>
+    </view>
+    <button class="btn-primary login__enter anim-fade-up" style="animation-delay:0.15s;" bindtap="enterApp">确认进入</button>
+  </block>
+</view>

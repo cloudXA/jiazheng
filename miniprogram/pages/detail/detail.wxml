@@ -1,0 +1,54 @@
+<navigation-bar title="风险记录" back="{{true}}"></navigation-bar>
+<scroll-view class="scrollarea" scroll-y>
+  <view wx:if="{{record}}" class="page anim-fade-up">
+    <view class="record-head record-head--{{record.riskLevel}}">
+      <view class="record-head__top">
+        <view class="record-head__risk">{{record.riskLabel}}</view>
+        <view class="record-head__status">{{statusLabel}}</view>
+      </view>
+      <view class="record-head__title">{{record.title}}</view>
+      <view class="record-head__summary">{{record.summary}}</view>
+      <view class="record-head__time">{{createdLabel}}</view>
+    </view>
+
+    <view class="detail-section">
+      <view class="detail-section__title">原始沟通</view>
+      <view class="source-text">{{record.sourceText}}</view>
+    </view>
+
+    <view class="detail-section">
+      <view class="detail-section__title">关键信息</view>
+      <view class="field-list">
+        <view wx:for="{{record.fields}}" wx:key="key" class="field-row">
+          <view class="field-row__label">{{item.label}}</view>
+          <view class="field-row__value field-row__value--{{item.status}}">{{item.value}}</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="detail-section">
+      <view class="detail-section__title">缺失证据</view>
+      <view wx:if="{{record.missingEvidence.length === 0}}" class="complete-line">关键证据已基本齐全</view>
+      <view wx:for="{{record.missingEvidence}}" wx:key="*this" class="detail-list">
+        <view class="detail-list__mark"></view>
+        <view>{{item}}</view>
+      </view>
+    </view>
+
+    <view class="message-panel">
+      <view class="detail-section__title">客户确认话术</view>
+      <text class="message-panel__text" user-select>{{record.confirmationMessage}}</text>
+      <view class="copy-button" bindtap="onCopyMessage">复制确认话术</view>
+    </view>
+
+    <view
+      class="confirm-button {{record.status === 'confirmed' ? 'confirm-button--done' : ''}}"
+      bindtap="onMarkConfirmed"
+    >
+      {{record.status === 'confirmed' ? '客户已书面确认' : '标记为客户已确认'}}
+    </view>
+
+    <view class="legal-note">请以客户真实回复、签字合同和业务人员复核为准。</view>
+    <view class="bottom-safe"></view>
+  </view>
+</scroll-view>

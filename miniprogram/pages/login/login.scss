@@ -1,0 +1,136 @@
+.login {
+  position: relative;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: calc(env(safe-area-inset-top) + 120rpx) 48rpx calc(env(safe-area-inset-bottom) + 60rpx);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login__bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(124, 58, 237, 0.28) 0%, rgba(79, 70, 229, 0.12) 40%, transparent 70%),
+    linear-gradient(160deg, #4F46E5 0%, #7C3AED 55%, #F5F7FB 100%);
+}
+
+.login__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 70rpx;
+}
+.login__logo {
+  width: 132rpx;
+  height: 132rpx;
+  border-radius: 36rpx;
+  background: rgba(255, 255, 255, 0.92);
+  color: #4F46E5;
+  font-size: 56rpx;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 16rpx 40rpx rgba(0, 0, 0, 0.18);
+}
+.login__welcome {
+  margin-top: 28rpx;
+  font-size: 46rpx;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 2rpx;
+}
+.login__sub {
+  margin-top: 10rpx;
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.card {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 40rpx 36rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar-wrapper {
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: none;
+}
+.avatar {
+  width: 132rpx;
+  height: 132rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.12);
+}
+.avatar-tip {
+  margin-top: 14rpx;
+  font-size: 24rpx;
+  color: #6B7280;
+}
+
+.nickname-wrapper {
+  width: 100%;
+  margin-top: 32rpx;
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+}
+.nickname-label {
+  font-size: 28rpx;
+  color: #1A1A2E;
+  font-weight: 600;
+}
+.nickname-input {
+  flex: 1;
+  height: 76rpx;
+  padding: 0 24rpx;
+  border-radius: 18rpx;
+  background: rgba(245, 247, 251, 0.9);
+  font-size: 28rpx;
+  border: 1rpx solid rgba(79, 70, 229, 0.15);
+}
+
+.login__phone {
+  width: 100%;
+  margin-top: 48rpx;
+}
+.login__privacy {
+  margin-top: 22rpx;
+  font-size: 22rpx;
+  color: rgba(255, 255, 255, 0.78);
+  text-align: center;
+}
+
+.info-avatar {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.12);
+}
+.info-name {
+  margin-top: 22rpx;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #1A1A2E;
+}
+.info-phone {
+  margin-top: 8rpx;
+  font-size: 26rpx;
+  color: #6B7280;
+}
+
+.login__enter {
+  width: 100%;
+  margin-top: 48rpx;
+}

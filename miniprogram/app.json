@@ -1,0 +1,38 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/home/home",
+    "pages/ai/ai",
+    "pages/mine/mine",
+    "pages/detail/detail"
+  ],
+  "window": {
+    "navigationStyle": "custom",
+    "backgroundColor": "#F5F7FB",
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#F5F7FB",
+    "navigationBarTitleText": "Weixin",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#6B7280",
+    "selectedColor": "#4F46E5",
+    "backgroundColor": "rgba(255,255,255,0.6)",
+    "list": [
+      { "pagePath": "pages/home/home", "text": "首页" },
+      { "pagePath": "pages/ai/ai", "text": "风控助手" },
+      { "pagePath": "pages/mine/mine", "text": "我的" }
+    ]
+  },
+  "rendererOptions": {
+    "skyline": {
+      "defaultDisplayBlock": true,
+      "defaultContentBox": true,
+      "tagName": "view"
+    }
+  },
+  "componentFramework": "glass-easel",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

@@ -1,0 +1,123 @@
+<navigation-bar title="签约风控" back="{{false}}"></navigation-bar>
+<scroll-view class="scrollarea" scroll-y>
+  <view class="page anim-fade-up">
+    <view class="intro">
+      <view class="intro__title">把现场描述变成可执行的留证清单</view>
+      <view class="intro__desc">说清客户、服务、阿姨来源、试工和收费约定。分析前请先核对转写文字。</view>
+    </view>
+
+    <view class="policy-bar">
+      <view class="policy-bar__mark">!</view>
+      <view>
+        <view class="policy-bar__title">未确认，不派单</view>
+        <view class="policy-bar__desc">口头同意不能替代微信回复或合同签字</view>
+      </view>
+    </view>
+
+    <view class="input-panel">
+      <view class="input-panel__head">
+        <view class="input-panel__title">客户沟通记录</view>
+        <view class="input-panel__example" bindtap="onUseExample">填入示例</view>
+      </view>
+      <textarea
+        class="case-input"
+        value="{{input}}"
+        maxlength="-1"
+        auto-height
+        placeholder="例如：客户试工7天，电话里同意收30%服务费，但签约后反悔；阿姨来自合作方，退款规则还没确认……"
+        placeholder-class="case-input__placeholder"
+        bindinput="onInput"
+      />
+      <view class="voice-row">
+        <view
+          class="voice-button {{recording ? 'voice-button--recording' : ''}}"
+          bindtap="onRecordTap"
+          hover-class="voice-button--hover"
+        >
+          <view class="voice-button__dot"></view>
+          <view>{{recording ? '结束录音' : (transcribing ? '正在转写' : '语音录入')}}</view>
+        </view>
+        <view class="voice-row__limit">最长 60 秒</view>
+      </view>
+      <view wx:if="{{transcriptionNote}}" class="transcription-note">{{transcriptionNote}}</view>
+
+      <view
+        class="analyze-button {{analyzing || transcribing ? 'analyze-button--disabled' : ''}}"
+        bindtap="onAnalyze"
+        hover-class="analyze-button--hover"
+      >
+        {{analyzing ? '正在分析风险…' : '生成风险清单'}}
+      </view>
+    </view>
+
+    <view wx:if="{{analyzing}}" class="loading-panel">
+      <view class="loading-panel__line"></view>
+      <view class="loading-panel__text">正在提取收费、试工、责任和证据字段</view>
+    </view>
+
+    <block wx:if="{{result}}">
+      <view class="result-head result-head--{{result.riskLevel}}">
+        <view>
+          <view class="result-head__label">{{result.riskLabel}}</view>
+          <view class="result-head__title">{{result.title}}</view>
+          <view class="result-head__summary">{{result.summary}}</view>
+        </view>
+        <view class="result-head__reset" bindtap="onReset">重新录入</view>
+      </view>
+
+      <view class="result-section">
+        <view class="result-section__title">关键信息</view>
+        <view class="field-grid">
+          <view wx:for="{{result.fields}}" wx:key="key" class="field-item field-item--{{item.status}}">
+            <view class="field-item__label">{{item.label}}</view>
+            <view class="field-item__value">{{item.value}}</view>
+          </view>
+        </view>
+      </view>
+
+      <view class="result-section">
+        <view class="result-section__title">为什么是这个风险等级</view>
+        <view wx:for="{{result.reasons}}" wx:key="*this" class="list-row">
+          <view class="list-row__bullet list-row__bullet--danger"></view>
+          <view class="list-row__text">{{item}}</view>
+        </view>
+      </view>
+
+      <view class="result-section">
+        <view class="result-section__title">还缺哪些证据</view>
+        <view wx:if="{{result.missingEvidence.length === 0}}" class="complete-line">关键证据已基本齐全</view>
+        <view wx:for="{{result.missingEvidence}}" wx:key="*this" class="list-row">
+          <view class="list-row__bullet list-row__bullet--warning"></view>
+          <view class="list-row__text">{{item}}</view>
+        </view>
+      </view>
+
+      <view class="result-section">
+        <view class="result-section__title">派单前必须确认</view>
+        <view wx:for="{{result.beforeDispatch}}" wx:key="*this" class="check-row">
+          <view class="check-row__box"></view>
+          <view class="check-row__text">{{item}}</view>
+        </view>
+      </view>
+
+      <view class="message-section">
+        <view class="message-section__title">发给客户的微信确认</view>
+        <text class="message-section__content" user-select>{{result.confirmationMessage}}</text>
+        <view class="message-section__action" bindtap="onCopyMessage">复制确认话术</view>
+      </view>
+
+      <view class="refusal-panel">
+        <view class="refusal-panel__title">客户拒绝确认时</view>
+        <view class="refusal-panel__content">{{result.refusalAction}}</view>
+      </view>
+
+      <view class="save-button {{saved ? 'save-button--saved' : ''}}" bindtap="onSave">
+        {{saved ? '已保存到工作台' : '保存这条风险记录'}}
+      </view>
+      <view class="internal-note">{{result.internalNote}}</view>
+    </block>
+
+    <view class="legal-note">本工具用于业务流程提示和证据整理，不构成法律意见；涉及事故、赔偿或争议时请咨询专业律师。</view>
+    <view class="bottom-safe"></view>
+  </view>
+</scroll-view>

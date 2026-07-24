@@ -1,0 +1,37 @@
+<navigation-bar title="我的" back="{{false}}"></navigation-bar>
+<scroll-view class="scrollarea" scroll-y>
+  <view class="page anim-fade-up">
+    <view class="profile glass-card">
+      <image wx:if="{{userInfo.avatarUrl}}" class="profile__avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill" />
+      <view wx:else class="profile__avatar profile__avatar--ph">👤</view>
+      <view class="profile__meta">
+        <view class="profile__name">{{userInfo.nickName}}</view>
+        <view wx:if="{{userInfo.phone}}" class="profile__phone">{{userInfo.phone}}</view>
+        <view wx:else class="profile__phone">未绑定手机号</view>
+      </view>
+    </view>
+
+    <view class="group glass-card">
+      <view class="cell" bindtap="onEdit" hover-class="cell--hover">
+        <view class="cell__icon">✏️</view>
+        <view class="cell__label">资料编辑</view>
+        <view class="cell__arrow">›</view>
+      </view>
+      <view class="cell" bindtap="onAbout" hover-class="cell--hover">
+        <view class="cell__icon">ℹ️</view>
+        <view class="cell__label">关于我们</view>
+        <view class="cell__arrow">›</view>
+      </view>
+    </view>
+
+    <view class="group glass-card">
+      <view class="cell cell--danger" bindtap="onLogout" hover-class="cell--hover">
+        <view class="cell__icon">🚪</view>
+        <view class="cell__label">退出登录</view>
+        <view class="cell__arrow">›</view>
+      </view>
+    </view>
+
+    <view class="bottom-safe"></view>
+  </view>
+</scroll-view>
